@@ -1,0 +1,4 @@
+enum SignInMethods{
+  Google,
+  Anonymous
+}
