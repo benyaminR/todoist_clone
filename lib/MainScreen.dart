@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class MainScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Todoist"),
@@ -12,12 +12,12 @@ class MainScreen extends StatelessWidget{
       body: Text("Main Screen"),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: null,
+        onPressed:()=> _add(context),
       ),
     );
   }
 
-  void _add(){
-
+  void _add(context){
+      Navigator.pushNamed(context, '/main/addOrEdit');
   }
 }
