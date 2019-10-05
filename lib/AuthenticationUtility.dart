@@ -16,4 +16,5 @@ class AuthenticationUtility{
     return _firebaseAuth.signInWithCredential(authCredential);
   }
 
+
 }
