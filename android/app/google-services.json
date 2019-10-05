@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "345452095258",
+    "firebase_url": "https://todoist-64036.firebaseio.com",
+    "project_id": "todoist-64036",
+    "storage_bucket": "todoist-64036.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345452095258:android:43eec323ce9478dd52eea3",
+        "android_client_info": {
+          "package_name": "com.puggames.todoist_clone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345452095258-sqoqrbu97q1vtlbnb9sca4f9nk7ch7ji.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB8Gk3uBj-8NWI7Z7-HJPbLW-2965JefY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345452095258-sqoqrbu97q1vtlbnb9sca4f9nk7ch7ji.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
