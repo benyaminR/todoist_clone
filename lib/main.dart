@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoist_clone/AddOrEditScreen.dart';
 import 'package:todoist_clone/Authentication.dart';
 import 'package:todoist_clone/MainScreen.dart';
 
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/' :(context)=> Authentication(),
         '/main' : (context) => MainScreen(),
+        '/main/addOrEdit' : (context) => AddOrEditScreen()
       },
     );
   }

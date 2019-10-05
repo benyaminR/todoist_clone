@@ -1,22 +1,21 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class MainScreen extends StatelessWidget{
+class AddOrEditScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text("Todoist"),
+        title: Text("AddOrEdit"),
       ),
-      body: Text("Main Screen"),
+      body: Text("AddOrEditScreen"),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: Icon(Icons.send),
         onPressed: null,
       ),
     );
   }
 
-  void _add(){
-  }
 }
