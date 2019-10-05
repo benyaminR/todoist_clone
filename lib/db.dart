@@ -12,7 +12,14 @@ class DB{
       list.documents.map((snapshot)=>Task.fromSnapshot(snapshot)
       ).toList()
     );
+  }
 
+  Future<void> addTask(Task task,uid){
+    return _firestore.collection(uid).document().setData(task.toMap());
+  }
+  
+  Stream<Task> getTask(docID,uid){
+    return _firestore.collection(uid).document(docID).snapshots().map((snapshot)=>Task.fromSnapshot(snapshot));
   }
 
 
