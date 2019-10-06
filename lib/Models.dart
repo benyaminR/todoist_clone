@@ -6,8 +6,9 @@ class Task{
   final String dueDate;
   final String priority;
   final String project;
+  bool isDone;
   final String docID;
-  Task({this.task, this.dueDate, this.priority, this.project,this.docID});
+  Task({this.task, this.dueDate, this.priority, this.project,this.isDone,this.docID});
 
   factory Task.fromSnapshot(DocumentSnapshot snapshot){
     return Task(
@@ -15,16 +16,18 @@ class Task{
       dueDate:    snapshot['dueDate'],
       priority:   snapshot['priority'],
       project:    snapshot['project'],
+      isDone:     snapshot['isDone'],
       docID:      snapshot.documentID
     );
   }
 
-  Map<String,String> toMap(){
+  Map<String,dynamic> toMap(){
     return {
       'task' : task,
       'dueDate' : dueDate,
       'priority' : priority,
-      'project' : project
+      'project' : project,
+      'isDone' : isDone
     };
   }
 }

@@ -7,7 +7,6 @@ class DB{
   Firestore _firestore = Firestore.instance;
 
   Stream<List<Task>> getTasks(uid) {
-    //String uid = (await FirebaseAuth.instance.currentUser()).uid;
     return _firestore.collection(uid).snapshots().map((list)=>
       list.documents.map((snapshot)=>Task.fromSnapshot(snapshot)
       ).toList()
@@ -21,7 +20,20 @@ class DB{
   Stream<Task> getTask(docID,uid){
     return _firestore.collection(uid).document(docID).snapshots().map((snapshot)=>Task.fromSnapshot(snapshot));
   }
+  
+  Future<void> editTask(Task task,uid){
+    print("A task with the following id has been edited : ${task.docID}");
+    return _firestore.collection(uid).document(task.docID).updateData(task.toMap());
+  }
+  
+  Future<void> deleteTask(uid,docID){
+    return _firestore.collection(uid).document(docID).delete();
+  }
 
+  Future<void> completeTask(String uid,String docID,Task task){
+    task.isDone = true;
+    return _firestore.collection(uid).document(docID).updateData(task.toMap());
+  }
 
 
 }
