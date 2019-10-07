@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,57 +9,49 @@ import 'package:todoist_clone/Models.dart';
 import 'package:todoist_clone/db.dart';
 
 class AddOrEditScreen extends StatelessWidget{
-  final TextEditingController _textEditingController = new TextEditingController();
-  final DB _db = new DB();
-
   final String docID;
 
   AddOrEditScreen({this.docID});
-
   @override
   Widget build(BuildContext context) {
     final FirebaseUser firebaseUser = Provider.of<FirebaseUser>(context);
-    return Scaffold(
-      appBar:AppBar(
-        bottom: PreferredSize(
-            child: Padding(
-              padding: EdgeInsets.only(left: 200,right: 200,bottom: 50),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text("Task",
-                    style: new TextStyle(
-                    fontSize:18
-                    ),
-                  ),
-                  TextField(
-                    style: new TextStyle(
-                      fontSize: 50
-                    ),
-                    decoration: InputDecoration(
-                        hintText: "Add a task",
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            preferredSize: Size.fromHeight(175)),
-      ),
-      body: docID != null ? StreamProvider<Task>.value(value: DB().getTask(docID, firebaseUser.uid),child: AddOrEditBody(_textEditingController),) : AddOrEditBody(_textEditingController),
-      floatingActionButton: Builder(builder: (context){
-        return Align(
-          alignment: Alignment.lerp(Alignment.centerRight, Alignment.topRight, 0.35),
-          child: FloatingActionButton(
-            backgroundColor: Colors.orange,
-            child: Icon(Icons.send),
-            onPressed:()=> docID != null ? _edit(context) : _add(context),
-          ),
-        );
-      })
-    );
+    return docID != null ? StreamProvider<Task>.value(
+      value: DB().getTask(docID, firebaseUser.uid),
+      child: AddOrEditContent(isEdit: true,),
+    ):
+    AddOrEditContent(isEdit: false,);
   }
 
+}
+
+class AddOrEditContent extends StatelessWidget{
+  final bool isEdit;
+  final TextEditingController _textEditingController = new TextEditingController();
+  final DB _db = new DB();
+
+  AddOrEditContent({this.isEdit});
+
+  @override
+  Widget build(BuildContext context) {
+
+    final Task task = isEdit ? Provider.of<Task>(context) : Task.fromSnapshot(null);
+
+    return Scaffold(
+        resizeToAvoidBottomInset:false,
+        appBar : AddOrEditAppBar(task:task,textEditingController: _textEditingController,),
+        body: AddOrEditBody(task:task),
+        floatingActionButton: Builder(builder: (context){
+          return Align(
+            alignment: Alignment.lerp(Alignment.centerRight, Alignment.topRight, 0.35),
+            child: FloatingActionButton(
+              backgroundColor: Colors.orange,
+              child: Icon(Icons.send),
+              onPressed:()=> isEdit ? _edit(context,task.docID) : _add(context),
+            ),
+          );
+        })
+    );
+  }
   void _add(context){
     if(_textEditingController.text.isNotEmpty){
       final user = Provider.of<FirebaseUser>(context);
@@ -75,7 +68,7 @@ class AddOrEditScreen extends StatelessWidget{
     }
   }
 
-  void _edit(context){
+  void _edit(context,docID){
     if(_textEditingController.text.isNotEmpty){
       final user = Provider.of<FirebaseUser>(context);
       Task task = new Task(
@@ -93,19 +86,61 @@ class AddOrEditScreen extends StatelessWidget{
   }
 }
 
+
+class AddOrEditAppBar extends StatelessWidget implements PreferredSizeWidget{
+  final Task task;
+  final TextEditingController textEditingController;
+  AddOrEditAppBar({this.task, this.textEditingController});
+  @override
+  Widget build(BuildContext context) {
+    //assign text
+    textEditingController.text = task.task;
+
+    return AppBar(
+      bottom: PreferredSize(
+          child: Padding(
+            padding: EdgeInsets.only(left: 200,right: 200,bottom: 50),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text("Task",
+                  style: new TextStyle(
+                      fontSize:18
+                  ),
+                ),
+                TextField(
+                  controller: textEditingController,
+                  style: new TextStyle(
+                      fontSize: 50
+                  ),
+                  decoration: InputDecoration(
+                    hintText: "Add a task",
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ),
+    );
+  }
+  @override
+  Size get preferredSize => Size.fromHeight(230);
+
+}
+
 class AddOrEditBody extends StatelessWidget{
-  final TextEditingController _textEditingController;
-  AddOrEditBody(this._textEditingController);
+  final bool isEdit;
+  final Task task;
+  AddOrEditBody({this.isEdit,this.task});
+
   @override
   Widget build(BuildContext context) {
     //before assigning any data we need to check whether we have
     //task because this widget works with edit and add
-    final Task task = Provider.of<Task>(context);
-    if(task != null){
-      _textEditingController.text = task.task;
-    }
+    //fromSnapshot returns a task with default values if there is no snapshot specified
     return Padding(
-      padding: const EdgeInsets.only(left:130 ),
+      padding: const EdgeInsets.only(left:130),
       child: Column(
         children: <Widget>[
           SizedBox(

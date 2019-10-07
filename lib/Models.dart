@@ -11,13 +11,19 @@ class Task{
   Task({this.task, this.dueDate, this.priority, this.project,this.isDone,this.docID});
 
   factory Task.fromSnapshot(DocumentSnapshot snapshot){
-    return Task(
-      task :      snapshot['task'],
-      dueDate:    snapshot['dueDate'],
-      priority:   snapshot['priority'],
-      project:    snapshot['project'],
-      isDone:     snapshot['isDone'],
-      docID:      snapshot.documentID
+    return snapshot != null ?Task(
+      task :      snapshot['task'] ?? '',
+      dueDate:    snapshot['dueDate'] ?? DateTime.now(),
+      priority:   snapshot['priority'] ?? '2',
+      project:    snapshot['project'] ?? 'inbox',
+      isDone:     snapshot['isDone'] ?? false,
+      docID:      snapshot.documentID ?? ''
+    ) : Task(
+      task:'',
+      dueDate: DateTime.now().toString(),
+      priority: '2',
+      project: 'inbox',
+      isDone: false,
     );
   }
 
