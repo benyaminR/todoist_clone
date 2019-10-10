@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todoist_clone/AddOrEditScreen.dart';
+import 'package:todoist_clone/AddOrEditScreen/AddOrEditScreen.dart';
 import 'package:todoist_clone/Authentication.dart';
 import 'package:todoist_clone/MainScreen.dart';
 import 'package:todoist_clone/Models.dart';
+import 'package:todoist_clone/blocs/EditBloc.dart';
 import 'package:todoist_clone/db.dart';
 
 void main() => runApp(MyApp());
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         StreamProvider<FirebaseUser>.value(value:FirebaseAuth.instance.onAuthStateChanged),
+//        ChangeNotifierProvider<EditBloc>.value(value: EditBloc(),child: AddOrEditScreen(),)
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

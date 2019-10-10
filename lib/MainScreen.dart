@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todoist_clone/AddOrEditScreen.dart';
+import 'package:todoist_clone/AddOrEditScreen/AddOrEditScreen.dart';
 import 'package:todoist_clone/Models.dart';
 import 'package:todoist_clone/db.dart';
 
