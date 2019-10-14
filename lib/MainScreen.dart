@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoist_clone/AddOrEditScreen/AddOrEditScreen.dart';
 import 'package:todoist_clone/Models.dart';
+import 'package:todoist_clone/blocs/EditBloc.dart';
 import 'package:todoist_clone/db.dart';
 
 class MainScreen extends StatelessWidget{
@@ -64,7 +65,8 @@ class Tasks extends StatelessWidget{
   }
 
   void _edit(context,docID){
-    Navigator.of(context).push(MaterialPageRoute(builder:(context)=>AddOrEditScreen(docID: docID,)));
+    final EditBloc editBloc = new EditBloc();
+    Navigator.of(context).push(MaterialPageRoute(builder:(context)=>ChangeNotifierProvider<EditBloc>.value(value: editBloc,child: AddOrEditScreen(docID: docID,),)));
   }
 
   void _delete(context,docID){

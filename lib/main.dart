@@ -17,7 +17,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         StreamProvider<FirebaseUser>.value(value:FirebaseAuth.instance.onAuthStateChanged),
-//        ChangeNotifierProvider<EditBloc>.value(value: EditBloc(),child: AddOrEditScreen(),)
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -25,7 +24,9 @@ class MyApp extends StatelessWidget {
         routes: {
           '/' :(context)=> Authentication(),
           '/main' : (context) => MainScreen(),
-          '/main/addOrEdit' : (context) => AddOrEditScreen()
+          '/main/addOrEdit' : (context) => ChangeNotifierProvider<EditBloc>.value(
+            value: EditBloc(),
+            child: AddOrEditScreen(),)
         },
       ),
     );

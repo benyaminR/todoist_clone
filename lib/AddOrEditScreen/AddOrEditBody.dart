@@ -47,7 +47,6 @@ class AddOrEditBody extends StatelessWidget{
             leading: Icon(Icons.outlined_flag,),
             onTap: ()=>_onPriority(context,editBloc),
           ),
-
         ],
       ),
     );

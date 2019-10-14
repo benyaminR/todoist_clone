@@ -10,22 +10,20 @@ import 'AddOrEditAppBar.dart';
 import 'AddOrEditBody.dart';
 
 class AddOrEditScreen extends StatelessWidget{
-  final String docID;
-  static EditBloc _editBloc = EditBloc();
 
+  final String docID;
   AddOrEditScreen({this.docID});
+
   @override
   Widget build(BuildContext context) {
+
     final FirebaseUser firebaseUser = Provider.of<FirebaseUser>(context);
-    print("Rebuild AddOrEditScreen");
-    return ChangeNotifierProvider<EditBloc>.value(
-      value: _editBloc,
-      child: docID != null ? StreamProvider<Task>.value(
+
+    return docID != null ? StreamProvider<Task>.value(
         value: DB().getTask(docID, firebaseUser.uid),
         child: AddOrEditContent(true),
       ):
-      AddOrEditContent(false),
-    );
+      AddOrEditContent(false);
   }
 }
 
@@ -33,17 +31,11 @@ class AddOrEditContent extends StatelessWidget{
   final bool isEdit;
   final TextEditingController _textEditingController = new TextEditingController();
   final DB _db = new DB();
-
   AddOrEditContent(this.isEdit);
-
   @override
   Widget build(BuildContext context) {
     final editBloc = Provider.of<EditBloc>(context);
-    Task task = isEdit ? Provider.of<Task>(context): new Task(task: '',dueDate: '',priority: '2',project: 'inbox');
-    _mapValues(task, editBloc);
-
-    print("Rebuild AddOrEditContent");
-
+    _mapValues(editBloc, context);
     return Scaffold(
            resizeToAvoidBottomInset:false,
            appBar : AddOrEditAppBar(textEditingController: _textEditingController,),
@@ -54,15 +46,14 @@ class AddOrEditContent extends StatelessWidget{
                child: FloatingActionButton(
                  backgroundColor: Colors.orange,
                  child: Icon(Icons.send),
-                 onPressed:()=> isEdit ? _edit(context,task,editBloc) : _add(context,task,editBloc),
+                 onPressed:()=> isEdit ? _edit(context,editBloc) : _add(context,editBloc),
                ),
              );
            })
        );
   }
 
-  void _add(context,Task task,EditBloc editBloc){
-    editBloc.task = _textEditingController.text;
+  void _add(context,EditBloc editBloc){
     if(editBloc.task.isNotEmpty){
       final user = Provider.of<FirebaseUser>(context);
       Task t = new Task(
@@ -78,10 +69,10 @@ class AddOrEditContent extends StatelessWidget{
     }
   }
 
-  void _edit(context,Task task,EditBloc editBloc){
-    editBloc.task = _textEditingController.text;
-    if(_textEditingController.text.isNotEmpty){
+  void _edit(context,EditBloc editBloc){
+    if(editBloc.task.isNotEmpty){
       final user = Provider.of<FirebaseUser>(context);
+      final Task task = Provider.of<Task>(context);
       Task t = new Task(
           task: editBloc.task,
           project: editBloc.project,
@@ -96,12 +87,13 @@ class AddOrEditContent extends StatelessWidget{
     }
   }
 
-  _mapValues(Task task, EditBloc editBloc) {
-      if (!editBloc.mapped) {
+  _mapValues(EditBloc editBloc,context) {
+    Task task = isEdit ? Provider.of<Task>(context) : new Task(task: '', dueDate: '', priority: '2', project: 'inbox');
+    if (!editBloc.mapped) {
         print("Mapping");
         editBloc.mapFromTask(task);
         editBloc.mapped = true;
-      } else {
+    } else {
         print("Already mapped");
       }
     }

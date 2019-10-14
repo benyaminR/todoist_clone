@@ -3,14 +3,49 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoist_clone/blocs/EditBloc.dart';
 
-class AddOrEditAppBar extends StatelessWidget implements PreferredSizeWidget{
+class AddOrEditAppBar extends StatefulWidget implements PreferredSizeWidget{
   final TextEditingController textEditingController;
   AddOrEditAppBar({this.textEditingController});
 
   @override
-  Widget build(BuildContext context) {
+  Size get preferredSize => Size.fromHeight(230);
 
-    textEditingController.text = Provider.of<EditBloc>(context).task;
+  @override
+  State<StatefulWidget> createState() {
+    return AddOrEditAppBarState(textEditingController: textEditingController);
+  }
+}
+
+class AddOrEditAppBarState extends State<AddOrEditAppBar>{
+  final TextEditingController textEditingController;
+  bool mapped = false;
+
+  AddOrEditAppBarState({this.textEditingController});
+
+  @override
+  void initState() {
+    super.initState();
+    textEditingController.addListener(_listenToField);
+  }
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
+  }
+
+  _listenToField(){
+    if(!mapped) {
+      textEditingController.text =
+      Provider.of<EditBloc>(context) != null ? Provider
+          .of<EditBloc>(context)
+          .task : '';
+      mapped = true;
+    }
+    Provider.of<EditBloc>(context).task = textEditingController.text;
+    print(textEditingController.text);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     //assign text
     return AppBar(
       bottom: PreferredSize(
@@ -44,8 +79,5 @@ class AddOrEditAppBar extends StatelessWidget implements PreferredSizeWidget{
       ),
     );
   }
-  @override
-  Size get preferredSize => Size.fromHeight(230);
-
 
 }
