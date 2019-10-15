@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoist_clone/AddOrEditScreen/AddOrEditScreen.dart';
 import 'package:todoist_clone/Authentication.dart';
-import 'package:todoist_clone/MainScreen.dart';
+import 'package:todoist_clone/MainScreen/MainScreen.dart';
 import 'package:todoist_clone/Models.dart';
 import 'package:todoist_clone/blocs/EditBloc.dart';
 import 'package:todoist_clone/db.dart';

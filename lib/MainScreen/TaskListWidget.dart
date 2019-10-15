@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoist_clone/AddOrEditScreen/AddOrEditScreen.dart';
@@ -7,33 +8,11 @@ import 'package:todoist_clone/Models.dart';
 import 'package:todoist_clone/blocs/EditBloc.dart';
 import 'package:todoist_clone/db.dart';
 
-class MainScreen extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    var user = Provider.of<FirebaseUser>(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Todoist"),
-      ),
-      body: StreamProvider<List<Task>>.value(
-        value: DB().getTasks(user.uid),child: Tasks(),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed:()=> _add(context),
-      ),
-    );
-  }
-
-  void _add(context){
-      Navigator.pushNamed(context, '/main/addOrEdit');
-  }
-}
 /*
 Return a list of tasks
 Note: Doesn't show tasks that are marked as done!
  */
-class Tasks extends StatelessWidget{
+class TaskListWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     var tasks = Provider.of<List<Task>>(context,listen: true);
@@ -54,7 +33,19 @@ class Tasks extends StatelessWidget{
               child: Icon(Icons.delete,color: Colors.white,),
             ),
             child: ListTile(
+              dense: false,
               title: Text(tasks[i].task),
+              subtitle: Text(tasks[i].dueDate),
+              trailing: Container(
+                width: 60,
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                  children: <Widget>[
+                    Text(tasks[i].project),
+                    _findLeading(int.tryParse(tasks[i].priority),)
+                  ],
+                ),
+              ),
               onTap: ()=> _edit(context,tasks[i].docID),
             ),
           )
@@ -62,6 +53,17 @@ class Tasks extends StatelessWidget{
           Container()
           ;
         });
+  }
+
+  Widget _findLeading(int priority){
+    Color color;
+    switch(priority){
+      case 0 : color = Colors.red;break;
+      case 1 : color = Colors.yellow;break;
+      case 2 : color = Colors.blue;break;
+      case 3 : color = Colors.grey;break;
+    }
+    return Icon(Icons.fiber_manual_record,color: color,);
   }
 
   void _edit(context,docID){
