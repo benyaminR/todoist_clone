@@ -15,6 +15,7 @@ class DB{
       print(equalTo);
     }
 
+
     return _firestore.
     collection(uid).
     where(field ,isEqualTo: equalTo).
@@ -23,6 +24,16 @@ class DB{
       list.documents.map((snapshot)=>Task.fromSnapshot(snapshot)
       ).toList()
     );
+  }
+
+
+  Stream<List<Project>> getProjects(String uid){
+    return _firestore
+        .collection(uid)
+        .document("userProjects")
+        .collection("projects")
+        .snapshots()
+        .map((list)=> list.documents.map((snapshot)=>Project.fromSnapshot(snapshot)).toList());
   }
 
   Future<void> addTask(Task task,uid){
@@ -47,5 +58,8 @@ class DB{
     return _firestore.collection(uid).document(docID).updateData(task.toMap());
   }
 
+  Future<void> addProject(String uid,Project project){
+    return _firestore.collection(uid).document("userProjects").collection("projects").add(project.toMap());
+  }
 
 }

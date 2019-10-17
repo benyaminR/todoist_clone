@@ -13,6 +13,8 @@ class MainScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     var user = Provider.of<FirebaseUser>(context);
     var drawerBloc = Provider.of<DrawerBloc>(context);
+    var projects = Provider.of<List<Project>>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(drawerBloc.list),
@@ -73,12 +75,37 @@ class MainScreen extends StatelessWidget{
               trailing: Text("3"),
               onTap: ()=> drawerBloc.list = "Today",
             ),
-            ListTile(
-              title: Text("Next 7 Days"),
-              leading: Icon(Icons.calendar_today),
-              trailing: Text("4"),
-              onTap: ()=> drawerBloc.list = "Next 7 Days",
+            Divider(
+              color: Colors.grey,
             ),
+            ListTile(
+              title: Text("Projects"),
+              leading: Icon(Icons.folder_open,color:Colors.grey),
+              trailing: FlatButton(
+                padding: EdgeInsets.only(left: 16),
+                onPressed: ()=> Navigator.pushNamed(context, '/main/addProject'),
+                child: Icon(Icons.add,color: Colors.grey,),
+              ),
+            ),
+            ListTile(
+              title: Text("Work"),
+              leading: Icon(Icons.fiber_manual_record,color:Colors.yellow),
+              onTap: ()=> drawerBloc.list = "Work",
+            ),
+            ListTile(
+              title: Text("Movies to Watch"),
+              leading: Icon(Icons.fiber_manual_record,color:Colors.blue),
+              onTap: ()=> drawerBloc.list = "Movies to Watch",
+            ),
+            if(projects != null)...[
+              for(int i = 0; i < projects.length ; i++)...{
+                ListTile(
+                  title: Text(projects[i].project),
+                  leading: Icon(Icons.fiber_manual_record,color: Color(projects[i].color),),
+                  onTap: ()=>drawerBloc.list = projects[i].project,
+                )
+              },
+            ],
             Divider(
               color: Colors.grey,
             ),
@@ -99,6 +126,7 @@ class MainScreen extends StatelessWidget{
       ),
     );
   }
+
   Stream<List<Task>> _getTasks(String uid, DrawerBloc drawerBloc){
     return DB().getTasks(uid,drawerBloc.list);
   }

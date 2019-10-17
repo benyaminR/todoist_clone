@@ -9,6 +9,8 @@ import 'package:todoist_clone/blocs/DrawerBloc.dart';
 import 'package:todoist_clone/blocs/EditBloc.dart';
 import 'package:todoist_clone/db.dart';
 
+import 'AddProject.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -18,14 +20,15 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         StreamProvider<FirebaseUser>.value(value:FirebaseAuth.instance.onAuthStateChanged),
-        ChangeNotifierProvider<DrawerBloc>.value(value: DrawerBloc())
+        ChangeNotifierProvider<DrawerBloc>.value(value: DrawerBloc()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         initialRoute: '/',
         routes: {
           '/' :(context)=> Authentication(),
-          '/main' : (context) => MainScreen(),
+          '/main' : (context) => StreamProvider<List<Project>>.value(value: DB().getProjects(Provider.of<FirebaseUser>(context).uid),child: MainScreen(),),
+          '/main/addProject' : (context) => AddProject(Provider.of<FirebaseUser>(context).uid),
           '/main/addOrEdit' : (context) => ChangeNotifierProvider<EditBloc>.value(
             value: EditBloc(),
             child: AddOrEditScreen(),)

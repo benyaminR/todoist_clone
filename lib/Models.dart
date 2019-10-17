@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/painting.dart';
 
 class Task{
   final String task;
@@ -28,6 +29,27 @@ class Task{
       'priority' : priority,
       'project' : project,
       'isDone' : isDone
+    };
+  }
+}
+
+class Project{
+  final String project;
+  final int color;
+
+  Project({this.project,this.color});
+
+  factory Project.fromSnapshot(DocumentSnapshot snapshot){
+    return Project(
+        project: snapshot['project'],
+        color : snapshot['color']
+    );
+  }
+
+  Map<String,dynamic> toMap(){
+    return {
+      'project' : project,
+      'color' : color
     };
   }
 }
