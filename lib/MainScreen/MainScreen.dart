@@ -102,7 +102,6 @@ class MainScreen extends StatelessWidget{
   Stream<List<Task>> _getTasks(String uid, DrawerBloc drawerBloc){
     return DB().getTasks(uid,drawerBloc.list);
   }
-
   void _add(context){
       Navigator.pushNamed(context, '/main/addOrEdit');
   }
