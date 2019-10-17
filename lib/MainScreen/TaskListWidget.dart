@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoist_clone/AddOrEditScreen/AddOrEditScreen.dart';
 import 'package:todoist_clone/Models.dart';
+import 'package:todoist_clone/blocs/DrawerBloc.dart';
 import 'package:todoist_clone/blocs/EditBloc.dart';
 import 'package:todoist_clone/db.dart';
 
@@ -17,42 +18,42 @@ class TaskListWidget extends StatelessWidget{
   Widget build(BuildContext context) {
     var tasks = Provider.of<List<Task>>(context,listen: true);
     return ListView.builder(
-        itemCount: tasks.length,
-        itemBuilder: (context,i){
-          return !tasks[i].isDone ? Dismissible(
-            key: new Key(i.toString()) ,
-            onDismissed:(DismissDirection dir)=> dir == DismissDirection.startToEnd ? _done(context,tasks[i].docID,tasks[i]):_delete(context,tasks[i].docID),
-            background: Container(
-              alignment: Alignment.centerLeft,
-              color: Colors.green,
-              child: Icon(Icons.done,color: Colors.white,),
-            ),
-            secondaryBackground: Container(
-              alignment: Alignment.centerRight,
-              color: Colors.red,
-              child: Icon(Icons.delete,color: Colors.white,),
-            ),
-            child: ListTile(
-              dense: false,
-              title: Text(tasks[i].task),
-              subtitle: Text(tasks[i].dueDate),
-              trailing: Container(
-                width: 60,
-                alignment: Alignment.bottomCenter,
-                child: Row(
-                  children: <Widget>[
-                    Text(tasks[i].project),
-                    _findLeading(int.tryParse(tasks[i].priority),)
-                  ],
+            itemCount: tasks.length,
+            itemBuilder: (context,i){
+              return !tasks[i].isDone ? Dismissible(
+                key: new Key(i.toString()) ,
+                onDismissed:(DismissDirection dir)=> dir == DismissDirection.startToEnd ? _done(context,tasks[i].docID,tasks[i]):_delete(context,tasks[i].docID),
+                background: Container(
+                  alignment: Alignment.centerLeft,
+                  color: Colors.green,
+                  child: Icon(Icons.done,color: Colors.white,),
                 ),
-              ),
-              onTap: ()=> _edit(context,tasks[i].docID),
-            ),
-          )
-              :
-          Container()
-          ;
-        });
+                secondaryBackground: Container(
+                  alignment: Alignment.centerRight,
+                  color: Colors.red,
+                  child: Icon(Icons.delete,color: Colors.white,),
+                ),
+                child: ListTile(
+                  dense: false,
+                  title: Text(tasks[i].task),
+                  subtitle: Text(tasks[i].dueDate),
+                  trailing: Container(
+                    width: 60,
+                    alignment: Alignment.bottomCenter,
+                    child: Row(
+                      children: <Widget>[
+                        Text(tasks[i].project),
+                        _findLeading(int.tryParse(tasks[i].priority),)
+                      ],
+                    ),
+                  ),
+                  onTap: ()=> _edit(context,tasks[i].docID),
+                ),
+              )
+                  :
+              Container()
+              ;
+            });
   }
 
   Widget _findLeading(int priority){

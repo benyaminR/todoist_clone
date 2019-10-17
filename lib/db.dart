@@ -1,13 +1,25 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todoist_clone/Models.dart';
 
 class DB{
   Firestore _firestore = Firestore.instance;
 
-  Stream<List<Task>> getTasks(uid) {
-    return _firestore.collection(uid).snapshots().map((list)=>
+  Stream<List<Task>> getTasks(uid,String value) {
+    String field = "project";
+    String equalTo = value;
+    if(value == "Today"){
+      field = "dueDate";
+      var time = DateTime.now();
+      equalTo = "${time.day}.${time.month}.${time.year}";
+      print(equalTo);
+    }
+
+    return _firestore.
+    collection(uid).
+    where(field ,isEqualTo: equalTo).
+    snapshots().
+    map((list)=>
       list.documents.map((snapshot)=>Task.fromSnapshot(snapshot)
       ).toList()
     );

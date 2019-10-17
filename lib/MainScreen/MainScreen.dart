@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoist_clone/MainScreen/TaskListWidget.dart';
 import 'package:todoist_clone/Models.dart';
+import 'package:todoist_clone/blocs/DrawerBloc.dart';
 import 'package:todoist_clone/db.dart';
 
 class MainScreen extends StatelessWidget{
+
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<FirebaseUser>(context);
+    var drawerBloc = Provider.of<DrawerBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Todoist"),
+        title: Text(drawerBloc.list),
       ),
       drawer: Drawer(
         child: ListView(
@@ -62,16 +65,19 @@ class MainScreen extends StatelessWidget{
               title: Text("Inbox"),
               leading: Icon(Icons.inbox),
               trailing: Text("10"),
+              onTap: ()=> drawerBloc.list = "Inbox",
             ),
             ListTile(
               title: Text("Today"),
               leading: Icon(Icons.today),
               trailing: Text("3"),
+              onTap: ()=> drawerBloc.list = "Today",
             ),
             ListTile(
               title: Text("Next 7 Days"),
               leading: Icon(Icons.calendar_today),
               trailing: Text("4"),
+              onTap: ()=> drawerBloc.list = "Next 7 Days",
             ),
             Divider(
               color: Colors.grey,
@@ -84,13 +90,17 @@ class MainScreen extends StatelessWidget{
         )
       ),
       body: StreamProvider<List<Task>>.value(
-        value: DB().getTasks(user.uid),child: TaskListWidget(),
+        value: _getTasks(user.uid,drawerBloc),
+        child: TaskListWidget(),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed:()=> _add(context),
       ),
     );
+  }
+  Stream<List<Task>> _getTasks(String uid, DrawerBloc drawerBloc){
+    return DB().getTasks(uid,drawerBloc.list);
   }
 
   void _add(context){
