@@ -6,18 +6,20 @@ import 'package:todoist_clone/MainScreen/TaskListWidget.dart';
 import 'package:todoist_clone/Models.dart';
 import 'package:todoist_clone/blocs/DrawerBloc.dart';
 import 'package:todoist_clone/db.dart';
+import 'package:todoist_clone/utilities/DateFormatter.dart';
 
 class MainScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+
     var user = Provider.of<FirebaseUser>(context);
     var drawerBloc = Provider.of<DrawerBloc>(context);
     var projects = Provider.of<List<Project>>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(drawerBloc.list),
+        title: Text('${drawerBloc.list}${drawerBloc.list == "Today" ?" ${DateFormatter.getToday()}" :""}'),
       ),
       drawer: Drawer(
         child: ListView(
@@ -67,13 +69,13 @@ class MainScreen extends StatelessWidget{
               title: Text("Inbox"),
               leading: Icon(Icons.inbox),
               trailing: Text("10"),
-              onTap: ()=> drawerBloc.list = "Inbox",
+              onTap: ()=> {drawerBloc.list = "Inbox",Navigator.pop(context)},
             ),
             ListTile(
               title: Text("Today"),
               leading: Icon(Icons.today),
               trailing: Text("3"),
-              onTap: ()=> drawerBloc.list = "Today",
+              onTap: ()=> {drawerBloc.list = "Today",Navigator.pop(context)},
             ),
             Divider(
               color: Colors.grey,
@@ -90,25 +92,26 @@ class MainScreen extends StatelessWidget{
             ListTile(
               title: Text("Work"),
               leading: Icon(Icons.fiber_manual_record,color:Colors.yellow),
-              onTap: ()=> drawerBloc.list = "Work",
+              onTap: ()=> {drawerBloc.list = "Work",Navigator.pop(context)},
             ),
             ListTile(
               title: Text("Movies to Watch"),
               leading: Icon(Icons.fiber_manual_record,color:Colors.blue),
-              onTap: ()=> drawerBloc.list = "Movies to Watch",
+              onTap: ()=> {drawerBloc.list = "Movies to Watch",Navigator.pop(context)},
             ),
             if(projects != null)...[
               for(int i = 0; i < projects.length ; i++)...{
                 ListTile(
                   title: Text(projects[i].project),
                   leading: Icon(Icons.fiber_manual_record,color: Color(projects[i].color),),
-                  onTap: ()=>drawerBloc.list = projects[i].project,
+                  onTap: ()=>{drawerBloc.list = projects[i].project,Navigator.pop(context)},
                 )
               },
             ],
             Divider(
               color: Colors.grey,
             ),
+
             ListTile(
               title: Text("Settings"),
               leading: Icon(Icons.settings),

@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         initialRoute: '/',
         routes: {
-          '/' :(context)=> Authentication(),
+          '/' :(context)=> Provider.of<FirebaseUser>(context) == null ? Authentication() : StreamProvider<List<Project>>.value(value: DB().getProjects(Provider.of<FirebaseUser>(context).uid),child: MainScreen(),),
           '/main' : (context) => StreamProvider<List<Project>>.value(value: DB().getProjects(Provider.of<FirebaseUser>(context).uid),child: MainScreen(),),
           '/main/addProject' : (context) => AddProject(Provider.of<FirebaseUser>(context).uid),
           '/main/addOrEdit' : (context) => ChangeNotifierProvider<EditBloc>.value(

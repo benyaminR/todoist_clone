@@ -16,45 +16,46 @@ Note: Doesn't show tasks that are marked as done!
 class TaskListWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    var tasks = Provider.of<List<Task>>(context,listen: true);
+    var tasks = Provider.of<List<Task>>(context);
 
-    return ListView.builder(
-            itemCount: tasks.length,
-            itemBuilder: (context,i){
-              return !tasks[i].isDone ? Dismissible(
-                key: new Key(i.toString()) ,
-                onDismissed:(DismissDirection dir)=> dir == DismissDirection.startToEnd ? _done(context,tasks[i].docID,tasks[i]):_delete(context,tasks[i].docID),
-                background: Container(
-                  alignment: Alignment.centerLeft,
-                  color: Colors.green,
-                  child: Icon(Icons.done,color: Colors.white,),
+    return ListView.separated(
+        padding: EdgeInsets.only(top: 8),
+        separatorBuilder:(context,index) => Divider(color: Colors.grey,height: 1,),
+        itemCount: tasks != null ? tasks.length : 0,
+        itemBuilder: (context,i){
+          return !tasks[i].isDone ? Dismissible(
+            key: new Key(i.toString()) ,
+            onDismissed:(DismissDirection dir)=> dir == DismissDirection.startToEnd ? _done(context,tasks[i].docID,tasks[i]):_delete(context,tasks[i].docID),
+            background: Container(
+              alignment: Alignment.centerLeft,
+              color: Colors.green,
+              child: Icon(Icons.done,color: Colors.white,),
+            ),
+            secondaryBackground: Container(
+              alignment: Alignment.centerRight,
+              color: Colors.red,
+              child: Icon(Icons.delete,color: Colors.white,),
+            ),
+            child: ListTile(
+              dense: false,
+              title: Text(tasks[i].task),
+              subtitle: Text(tasks[i].dueDate),
+              trailing: Container(
+                width: 60,
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                  children: <Widget>[
+                    Text(tasks[i].project),
+                    _findLeading(int.tryParse(tasks[i].priority),)
+                  ],
                 ),
-                secondaryBackground: Container(
-                  alignment: Alignment.centerRight,
-                  color: Colors.red,
-                  child: Icon(Icons.delete,color: Colors.white,),
-                ),
-                child: ListTile(
-                  dense: false,
-                  title: Text(tasks[i].task),
-                  subtitle: Text(tasks[i].dueDate),
-                  trailing: Container(
-                    width: 60,
-                    alignment: Alignment.bottomCenter,
-                    child: Row(
-                      children: <Widget>[
-                        Text(tasks[i].project),
-                        _findLeading(int.tryParse(tasks[i].priority),)
-                      ],
-                    ),
-                  ),
-                  onTap: ()=> _edit(context,tasks[i].docID),
-                ),
-              )
-                  :
-              Container()
-              ;
-            });
+              ),
+              onTap: ()=> _edit(context,tasks[i].docID),
+            ),
+          ):
+          Text("Use the floating action button to add a new task")
+          ;
+        });
   }
 
   Widget _findLeading(int priority){

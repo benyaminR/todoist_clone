@@ -6,7 +6,9 @@ import 'package:todoist_clone/AuthenticationUtility.dart';
 import 'package:todoist_clone/SignInMethods.dart';
 
 class Authentication extends StatelessWidget{
-  AuthenticationUtility _authenticationUtility = new AuthenticationUtility();
+
+  final AuthenticationUtility _authenticationUtility = new AuthenticationUtility();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
