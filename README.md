@@ -2,15 +2,9 @@
 
 In this project i attempt to clone the popular todo app todoist by using flutter and firebase
 
-## Getting Started
+#Features
++Add projects and choose colors for them
++Review and sort your task by project name or date
++Edit, add and delete project
++Choose a priority for your tasks
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
