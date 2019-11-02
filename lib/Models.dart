@@ -9,6 +9,8 @@ class Task{
   final String project;
   bool isDone;
   final String docID;
+
+
   Task({this.task, this.dueDate, this.priority, this.project,this.isDone,this.docID});
 
   factory Task.fromSnapshot(DocumentSnapshot snapshot){
